@@ -1,6 +1,6 @@
 import React from "react";
 import "./styles/Hero.css";
-import logo from "../images/badge-header.svg";
+import logo from "../images/platziconf-logo.svg";
 
 class Hero extends React.Component {
   render() {

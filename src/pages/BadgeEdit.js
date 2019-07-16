@@ -6,9 +6,9 @@ import api from "../api";
 import md5 from "md5";
 import PageLoading from "../components/PageLoading";
 
-class BadgeNew extends React.Component {
+class BadgeEdit extends React.Component {
   state = {
-    loading: false,
+    loading: true,
     error: null,
     form: {
       firstName: "",
@@ -17,6 +17,23 @@ class BadgeNew extends React.Component {
       jobTitle: "",
       twitter: "",
       avatarUrl: ""
+    }
+  };
+
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData = async e => {
+    this.setState({
+      loading: true,
+      error: null
+    });
+    try {
+      const data = await api.badges.read(this.props.match.params.badgeId);
+      this.setState({ loading: false, form: data });
+    } catch (error) {
+      this.setState({ loading: false, error });
     }
   };
 
@@ -39,7 +56,7 @@ class BadgeNew extends React.Component {
           avatarUrl: this.gravatarUrl(this.state.form.email)
         }
       });
-      await api.badges.create(this.state.form);
+      await api.badges.update(this.props.match.params.badgeId, this.state.form);
       this.setState({ loading: false });
       this.props.history.push("/badges");
     } catch (error) {
@@ -72,7 +89,7 @@ class BadgeNew extends React.Component {
               />
             </div>
             <div className="col">
-              <h1>New Attendant</h1>
+              <h1>Edit Attendant</h1>
               <BadgeForm
                 onChange={this.handleChange}
                 onSubmit={this.handleSubmit}
@@ -87,4 +104,4 @@ class BadgeNew extends React.Component {
   }
 }
 
-export default BadgeNew;
+export default BadgeEdit;
